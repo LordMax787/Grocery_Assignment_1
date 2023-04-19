@@ -277,7 +277,7 @@
     });
     cartTotalElement.textContent = totalPrice.toFixed(2);
 
-    // Update the clear cart button's disabled state
+    
     const clearCartButton = document.getElementById('clear-cart');
     if (clearCartButton) {
         clearCartButton.disabled = cart.length === 0;
@@ -290,10 +290,7 @@
     }
 }
 
-            document.addEventListener('DOMContentLoaded', () => {
-                displayCart();
-            });
-
+            
         function goBack() {
             const currentURL = window.location.href;
             const mainPageURL = `${window.location.origin}${window.location.pathname}`;
@@ -421,17 +418,7 @@
                     fetchProducts(categoryName);
                 });
             });
-            document.addEventListener('DOMContentLoaded', () => {
-                const searchInput = document.querySelector('.search-input');
-                
-                if (searchInput) {
-                    searchInput.addEventListener('input', (event) => {
-                    // Your search functionality code here
-                    });
-                } else {
-                    console.error('searchInput element not found');
-                }
-                });
+            
 
     </script>
 </body>
