@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grocery Store</title>
+    <link rel="stylesheet" href="w3.css">
+    <style>
+        body {
+            font-family: Verdana, sans-serif;
+            background-color: #DFDFDF;
+        }
+        .red-accent {
+            color: rgba(138, 16, 38, 0.5);
+        }
+        .dark-green-accent {
+            color: rgba(24, 120, 60, 0.5);
+        }
+        .search-bar {
+            position: absolute;
+            top: 0;
+            height: 80px;
+            background-color: #DFDFDF;
+            border-radius: 0;
+        }
+        .logo {
+            height: 80px;
+            width: auto;
+        }
+        .shopping-cart, .side-menu {
+            position: fixed;
+            top: 80px;
+            bottom: 0;
+            overflow-y: auto;
+        }
+        .shopping-cart {
+            left: 0;
+            background-color: rgba(138, 16, 38, 0.5);
+        }
+        .cart-items-container {
+            max-height: calc(100vh - 240px);
+            overflow-y: auto;
+        }
+        .cart-summary {
+            position: sticky;
+            bottom: 0;
+            background-color: rgba(255, 255, 255, 0.8);
+            width: 100%;
+        }
+        .cart-item {
+            display: flex;
+            flex-direction: column;
+            padding: 5px;
+            border: 1px solid rgba(138, 16, 38, 0.2);
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        .cart-item h4 {
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .cart-item p {
+            font-size: 12px;
+            margin-bottom: 0;
+        }
+    
+        .side-menu {
+            right: 0;
+            width: 5%;
+            background-color: rgba(138, 16, 38, 0.5);
+        }
+        .main-info {
+            padding-top: 80px;
+            padding-bottom: 20px;
+            margin-left: calc(80px + 1%);
+            margin-right: 5%;
+        }
+        .back-button {
+            font-size: 30px;
+            text-align: center;
+            cursor: pointer;
+        }   
+
+        .w3-bar {
+            height: 80px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+            background-color: rgba(138, 16, 38, 0.5);
+        }
+        .w3-input {
+            border: none;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        }
+        input[type="search"]::placeholder {
+            color: #8A1026;
+        }
+        .category-container {
+            margin-top: 20px;
+        }
+    </style>    
+</head>
+<body>
+    <div class="w3-top w3-bar">
+        <img src="images/LOGO.png" alt="Logo" class="w3-left logo">
+        <input type="search" placeholder="Search" class="w3-right w3-input search-bar search-input">
+    </div>
+
+    <div class="shopping-cart w3-padding w3-animate-left">
+        <h3 class="w3-center">Cart</h3>
+        <button id="clear-cart" class="w3-button w3-round w3-center w3-margin-bottom">Clear</button>
+        <div class="cart-items-container w3-margin-bottom">
+          <!-- Cart items will be populated here -->
+        </div>
+        <div class="cart-summary w3-padding w3-border w3-border-grey w3-round">
+          <p class="w3-right"><strong>Total: $<span id="cart-total">0.00</span></strong></p>
+          <button id="checkout-button" class="w3-button w3-green w3-margin-top">Checkout</button>
+        </div>
+      </div>
+      
+
+    <div class="side-menu w3-padding w3-animate-right">
+        <div class="w3-padding back-button" onclick="goBack();">&#8592;</div>
+    </div>    
+
+    <div class="main-info w3-animate-opacity">
+        <div class="category-container"></div>
+        <div class="w3-row-padding">
+            <div class="w3-col l4 m6 w3-margin-bottom">
+                <div class="w3-display-container w3-hover-opacity category" id="fruit-veg" data-category="fruit & veg">
+                    <img src="images/fruit-veg.jpg" alt="Fruit & Veg" style="width:100%">
+                    <div class="w3-padding w3-display-bottomleft">Fruit & Veg</div>
+                </div>
+            </div>
+            <div class="w3-col l4 m6 w3-margin-bottom">
+                <div class="w3-display-container w3-hover-opacity category" id="meat-seafood" data-category="meat & seafood">
+                    <img src="images/meat-seafood.jpg" alt="Meat & Seafood" style="width:100%">
+                    <div class="w3-padding w3-display-bottomleft">Meat & Seafood</div>
+                </div>
+            </div>
+            <div class="w3-col l4 m6 w3-margin-bottom">
+                <div class="w3-display-container w3-hover-opacity category" id="bakery" data-category="bakery">
+                    <img src="images/bakery.jpg" alt="Bakery" style="width:100%">
+                    <div class="w3-padding w3-display-bottomleft">Bakery</div>
+                </div>
+            </div>
+        </div>
+        <div class="w3-row-padding">
+            <div class="w3-col l4 m6 w3-margin-bottom">
+                <div class="w3-display-container w3-hover-opacity category" id="dairy-eggs" data-category="dairy & eggs">
+                    <img src="images/dairy-eggs.jpg" alt="Dairy & Eggs" style="width:100%">
+                    <div class="w3-padding w3-display-bottomleft">Dairy & Eggs</div>
+                </div>
+            </div>
+            <div class="w3-col l4 m6 w3-margin-bottom">
+                <div class="w3-display-container w3-hover-opacity category" id="pantry" data-category="pantry">
+                    <img src="images/pantry.jpg" alt="Pantry" style="width:100%">
+                    <div class="w3-padding w3-display-bottomleft">Pantry</div>
+                </div>
+            </div>
+            <div class="w3-col l4 m6 w3-margin-bottom">
+                <div class="w3-display-container w3-hover-opacity category" id="snacks-confectionary" data-category="snacks & confectionary">
+                    <img src="images/snacks-confectionary.jpg" alt="Snacks & Confectionary" style="width:100%">
+                    <div class="w3-padding w3-display-bottomleft">Snacks & Confectionary</div>
+                </div>
+            </div>
+        </div>
+        <div class="w3-row-padding">
+            <div class="w3-col l4 m6 w3-margin-bottom">
+                <div class="w3-display-container w3-hover-opacity category" id="drinks" data-category="drinks">
+                    <img src="images/drinks.jpg" alt="Drinks" style="width:100%">
+                    <div class="w3-padding w3-display-bottomleft">Drinks</div>
+                </div>
+            </div>
+            <div class="w3-col l4 m6 w3-margin-bottom">
+                <div class="w3-display-container w3-hover-opacity category" id="freezer" data-category="freezer">
+                    <img src="images/freezer.jpg" alt="Freezer" style="width:100%">
+                    <div class="w3-padding w3-display-bottomleft">Freezer</div>
+                </div>
+            </div>
+            <div class="w3-col l4 m6 w3-margin-bottom">
+                <div class="w3-display-container w3-hover-opacity category" id="baby" data-category="baby">
+                    <img src="images/baby.jpg" alt="Baby" style="width:100%">
+                    <div class="w3-padding w3-display-bottomleft">Baby</div>
+                </div>
+            </div>
+        </div>   
+    </div>
+        <!-- <div id="checkout-page" class="w3-animate-opacity" style="display: none;">
+            <h2 class="w3-center">Checkout</h2>
+    <div class="w3-container">
+        <table class="w3-table w3-bordered w3-striped">
+            <thead>
+                <tr>
+                    <th>Product Name</th>
+                    <th>Quantity</th>
+                    <th>Price</th>
+                </tr>
+            </thead>
+            <tbody id="checkout-table-body">
+           
+            </tbody>
+        </table>
+        <p class="w3-right"><strong>Total: $<span id="checkout-total">0.00</span></strong></p>
+        <div class="w3-center">
+            <button id="confirm-checkout" class="w3-button w3-green">Confirm Checkout</button>
+            <button id="back-to-shopping" class="w3-button w3-blue">Back to Shopping</button>
+
+        </div> -->
+    </div>
+</div>
+    <script>
+        function adjustLayout() {
+            const logo = document.querySelector('.logo');
+            const searchBar = document.querySelector('.search-bar');
+            const shoppingCart = document.querySelector('.shopping-cart');
+            const mainInfo = document.querySelector('.main-info');
+
+            const logoWidth = logo.clientWidth;
+            shoppingCart.style.width = `${logoWidth}px`;
+            mainInfo.style.marginLeft = `${logoWidth + 1}px`;
+            searchBar.style.left = `${logoWidth + 1}px`;
+            searchBar.style.width = `calc(100% - ${logoWidth + 1}px - 5%)`;
+        }
+        window.addEventListener('load', adjustLayout);
+        window.addEventListener('resize', adjustLayout);
+
+        let cart = [];
+
+        function addToCart(productId, productName, unitPrice, unitQuantity) {
+            const itemIndex = cart.findIndex(item => item.id === productId);
+
+            if (itemIndex === -1) {
+                cart.push({
+                    id: productId,
+                    name: productName,
+                    price: unitPrice,
+                    quantity: unitQuantity,
+                    count: 1
+                });
+            } else {
+                cart[itemIndex].count++;
+            }
+
+            displayCart();
+        }
+
+        function displayCart() {
+            const cartItemsContainer = document.querySelector(".cart-items-container");
+            const cartTotalElement = document.getElementById("cart-total");
+            cartItemsContainer.innerHTML = "";
+
+            let totalPrice = 0;
+
+            cart.forEach((item) => {
+                const cartItem = document.createElement("div");
+                cartItem.className = "cart-item";
+                cartItem.style.border = "1px solid #ccc"; // Add a border
+                cartItem.style.marginBottom = "10px"; // Add some margin at the bottom
+                cartItem.innerHTML = `
+                    <div style="position: relative; padding: 5px;">
+                        <span class="remove-button" style="position: absolute; right: 5px; top: 5px; cursor: pointer; font-size: 16px; font-weight: bold; color: #8A1026;">x</span>
+                        <h4>${item.name}</h4>
+                        <p>Quantity: ${item.quantity} x ${item.count}</p>
+                        <p>Price: $${item.price * item.count}</p>
+                    </div>
+                `;
+
+                cartItem.querySelector('.remove-button').addEventListener('click', () => {
+                    cart = cart.filter(cartItem => cartItem.id !== item.id);
+                    displayCart();
+                });
+
+        cartItemsContainer.appendChild(cartItem);
+         totalPrice += item.count * item.price;
+    });
+    cartTotalElement.textContent = totalPrice.toFixed(2);
+
+    // Update the clear cart button's disabled state
+    const clearCartButton = document.getElementById('clear-cart');
+    if (clearCartButton) {
+        clearCartButton.disabled = cart.length === 0;
+        clearCartButton.onclick = () => {
+            cart = [];
+            displayCart();
+        };
+    } else {
+        console.error('clearCartButton element not found');
+    }
+}
+
+            document.addEventListener('DOMContentLoaded', () => {
+                displayCart();
+            });
+
+        function goBack() {
+            const currentURL = window.location.href;
+            const mainPageURL = `${window.location.origin}${window.location.pathname}`;
+            if (currentURL !== mainPageURL) {
+                window.location.href = mainPageURL;
+            } else {
+                const mainInfo = document.querySelector('.main-info');
+                const checkoutPage = document.getElementById('checkout-page');
+                mainInfo.style.display = 'block';
+                checkoutPage.style.display = 'none';
+            }
+        }
+
+        
+        function fetchProducts(category) {
+            const url = 'database.php?category=' + encodeURIComponent(category);
+
+            fetch(url)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('HTTP error ' + response.status);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    displayProducts(data);
+                })
+                .catch(error => {
+                    console.error('Error fetching products:', error);
+                });
+        }
+        function displayProducts(products) {
+            const categoryContainer = document.querySelector('.category-container');
+            categoryContainer.innerHTML = '';
+
+            const productGrid = document.createElement('div');
+            productGrid.classList.add('w3-row-padding');
+            categoryContainer.appendChild(productGrid);
+
+            products.forEach(product => {
+                const productDiv = document.createElement('div');
+                    productDiv.classList.add('w3-col', 'l4', 'm6', 'w3-margin-bottom');
+
+                const productCard = document.createElement('div');
+                    productCard.classList.add('w3-display-container', 'w3-hover-opacity', 'product');
+                    productCard.setAttribute('data-product-id', product.id);
+                    productDiv.appendChild(productCard);
+
+                const productImage = document.createElement('img');
+                    productImage.src = 'images/' + product.product_name + '.jpg';
+                    productImage.alt = product.product_name;
+                    productImage.style.width = '100%';
+                    productCard.appendChild(productImage);
+
+                const productInfo = document.createElement('div');
+                    productInfo.classList.add('w3-padding', 'w3-display-bottomleft');
+                    productCard.appendChild(productInfo);
+
+                const productName = document.createElement('h4');
+                    productName.textContent = product.product_name;
+                    productName.style.textAlign = 'center';
+                    productName.style.fontWeight = 'bold';
+                    productInfo.appendChild(productName);
+
+                const unitPrice = document.createElement('span');
+                    unitPrice.textContent = '$' + product.unit_price.toFixed(2);
+                    unitPrice.style.fontWeight = 'bold';
+
+                const unitQuantity = document.createElement('span');
+                    unitQuantity.textContent = ' ' + product.unit_quantity;
+                    unitQuantity.style.fontWeight = 'bold';
+
+                const priceAndQuantity = document.createElement('p');
+                    priceAndQuantity.style.textAlign = 'center';
+                    priceAndQuantity.appendChild(unitPrice);
+                    priceAndQuantity.appendChild(unitQuantity);
+                    productInfo.appendChild(priceAndQuantity);
+
+                const stockStatus = document.createElement('p');
+                    stockStatus.textContent = product.in_stock > 0 ? 'In Stock' : 'Out of Stock';
+                    stockStatus.style.color = product.in_stock > 0 ? '#006400' : '#8B0000'; // dark green and dark red
+                    stockStatus.style.textAlign = 'center';
+                    stockStatus.style.fontSize = '0.9em';
+                    productInfo.appendChild(stockStatus);
+
+                const addToCartButton = document.createElement('button');
+                    addToCartButton.textContent = 'Add to Cart';
+                    addToCartButton.classList.add('w3-button', 'w3-round', 'w3-margin-top', 'w3-right');
+                    addToCartButton.style.backgroundColor = product.in_stock > 0 ? '#8A1026' : 'grey';
+                    addToCartButton.disabled = product.in_stock <= 0;
+                    addToCartButton.addEventListener('click', () => {
+                        addToCart(product.id, product.product_name, parseFloat(product.unit_price), product.unit_quantity);
+                    });
+                    productInfo.appendChild(addToCartButton);
+
+                    productGrid.appendChild(productDiv);
+            });
+        }
+
+        const searchInput = document.querySelector('.search-input');
+            searchInput.addEventListener('input', (event) => {
+                const searchQuery = event.target.value;
+                // Call your search function here with the searchQuery as a parameter
+            });
+
+        const categoryDivs = document.querySelectorAll('.category');
+            categoryDivs.forEach(categoryDiv => {
+                categoryDiv.addEventListener('click', () => {
+                    const category = categoryDiv.getAttribute('data-category');
+                    fetchProducts(category);
+                });
+            });
+
+            document.querySelectorAll('[data-subcategory]').forEach(subcategory => {
+                subcategory.addEventListener('click', (event) => {
+                    event.stopPropagation();
+                    const categoryName = subcategory.getAttribute('data-subcategory');
+                    fetchProducts(categoryName);
+                });
+            });
+            document.querySelectorAll('.subcategory').forEach(subcategory => {
+                subcategory.addEventListener('click', (event) => {
+                    event.stopPropagation();
+                    const categoryName = subcategory.getAttribute('data-category');
+                    fetchProducts(categoryName);
+                });
+            });
+            document.addEventListener('DOMContentLoaded', () => {
+                const searchInput = document.querySelector('.search-input');
+                
+                if (searchInput) {
+                    searchInput.addEventListener('input', (event) => {
+                    // Your search functionality code here
+                    });
+                } else {
+                    console.error('searchInput element not found');
+                }
+                });
+
+    </script>
+</body>
+</html>
