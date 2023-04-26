@@ -354,9 +354,126 @@
             } else {
                 console.error("clearCartButton element not found");
             }
+            
+            const checkoutButton = document.getElementById("checkout-button");
+            if (checkoutButton) {
+                checkoutButton.disabled = cart.length === 0;
+            } else {
+                console.error("checkoutButton element not found");
+            }
+            checkoutButton.onclick = () => {
+                showCheckoutForm();
+                };
+
+
         }
 
-            
+        // Add the following functions to your existing script in index.html
+
+        function createCheckoutForm() {
+            const checkoutContainer = document.createElement('div');
+            checkoutContainer.className = 'checkout-container';
+
+            const logo = document.createElement('img');
+            logo.src = 'LOGO.png';
+            logo.className = 'checkout-logo';
+            checkoutContainer.appendChild(logo);
+
+            const checkoutTitle = document.createElement('h2');
+            checkoutTitle.textContent = 'CHECKOUT';
+            checkoutTitle.className = 'checkout-title';
+            checkoutContainer.appendChild(checkoutTitle);
+
+            const form = document.createElement('form');
+            form.className = 'checkout-form';
+            form.setAttribute('onsubmit', 'submitOrder(event)');
+            checkoutContainer.appendChild(form);
+
+            const fields = [
+                { name: 'name', label: 'Name' },
+                { name: 'address', label: 'Address' },
+                { name: 'suburb', label: 'Suburb' },
+                { name: 'state', label: 'State' },
+                { name: 'country', label: 'Country' },
+                { name: 'phone', label: 'Phone Number' },
+                { name: 'email', label: 'Email Address' },
+            ];
+
+            fields.forEach(field => {
+                const inputContainer = document.createElement('div');
+                inputContainer.className = 'input-container';
+                form.appendChild(inputContainer);
+
+                const label = document.createElement('label');
+                label.htmlFor = field.name;
+                label.textContent = field.label + ':';
+                inputContainer.appendChild(label);
+
+                const input = document.createElement('input');
+                input.type = 'text';
+                input.name = field.name;
+                input.id = field.name;
+                input.required = true;
+                inputContainer.appendChild(input);
+            });
+
+            const placeOrderButton = document.createElement('button');
+            placeOrderButton.type = 'submit';
+            placeOrderButton.textContent = 'Place Order';
+            placeOrderButton.className = 'place-order-button';
+            form.appendChild(placeOrderButton);
+
+            return checkoutContainer;
+        }
+
+        function showCheckoutForm() {
+            const mainInfo = document.querySelector('.main-info');
+            mainInfo.innerHTML = '';
+            mainInfo.appendChild(createCheckoutForm());
+        }
+
+        function submitOrder(event) {
+            event.preventDefault();
+
+            // Collect form data
+            const formData = new FormData(event.target);
+
+            // Send data to the server
+            fetch('database.php', {
+                method: 'POST',
+                body: formData,
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.text();
+            })
+            .then(() => {
+                // Show the thank you message
+                showThankYouMessage();
+            })
+            .catch(error => {
+                console.error('There was a problem with the fetch operation:', error);
+            });
+        }
+
+
+        // Add the following event listener to your existing script in index.html
+
+        document.querySelector('#checkout').addEventListener('click', showCheckoutForm);
+
+        function showThankYouMessage() {
+            const mainInfo = document.querySelector('.main-info');
+            mainInfo.innerHTML = '';
+
+            const thankYouMessage = document.createElement('h2');
+            thankYouMessage.textContent = 'Thank you for your order!';
+            thankYouMessage.className = 'thank-you-message';
+            mainInfo.appendChild(thankYouMessage);
+        }
+
+                    
         function goBack() {
             const currentURL = window.location.href;
             const mainPageURL = `${window.location.origin}${window.location.pathname}`;
