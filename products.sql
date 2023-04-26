@@ -22,7 +22,7 @@ INSERT INTO products VALUES (1001, 'Bananas', 0.90, 'per kilogram', 800, 'fruit 
 INSERT INTO products VALUES (1002, 'Carrots', 1.95, 'per kilogram', 1000, 'fruit & veg');
 INSERT INTO products VALUES (1003, 'Broccoli', 2.80, 'per kilogram', 600, 'fruit & veg');
 INSERT INTO products VALUES (1004, 'Tomatoes', 3.30, 'per kilogram', 400, 'fruit & veg');
-INSERT INTO products VALUES (1005, 'Lettuce', 1.50, 'per head', 300, 'fruit & veg');
+INSERT INTO products VALUES (1005, 'Lettuce', 1.50, 'per head', 0, 'fruit & veg');
 
 INSERT INTO products VALUES (1006, 'Chicken Breasts', 9.99, 'per kilogram', 500, 'meat & seafood');
 INSERT INTO products VALUES (1007, 'Ground Beef', 8.99, 'per kilogram', 800, 'meat & seafood');
@@ -36,7 +36,7 @@ INSERT INTO products VALUES (1013, 'Bagels', 0.50, 'per piece', 800, 'bakery');
 INSERT INTO products VALUES (1014, 'Croissants', 1.20, 'per piece', 600, 'bakery');
 INSERT INTO products VALUES (1015, 'Muffins', 1.50, 'per piece', 400, 'bakery');
 INSERT INTO products VALUES (1016, 'Donuts', 0.80, 'per piece', 500, 'bakery');
-INSERT INTO products VALUES (1017, 'Cookies', 4.99, 'per 200g pack', 300, 'bakery');
+INSERT INTO products VALUES (1017, 'Cookies', 4.99, 'per 200g pack', 0, 'bakery');
 
 INSERT INTO products VALUES (1018, 'Milk', 1.25, 'per liter', 1000, 'dairy & eggs');
 INSERT INTO products VALUES (1019, 'Cheese', 11.99, 'per kilogram', 500, 'dairy & eggs');
@@ -48,7 +48,7 @@ INSERT INTO products VALUES (1023, 'Sour Cream', 1.79, 'per 500g container', 500
 INSERT INTO products VALUES (1024, 'Pasta', 1.49, 'per 500g pack', 1000, 'pantry');
 INSERT INTO products VALUES (1025, 'Rice', 1.99, 'per 1kg bag', 800, 'pantry');
 INSERT INTO products VALUES (1026, 'Canned Tomatoes', 1.29, 'per 400g can', 600, 'pantry');
-INSERT INTO products VALUES (1027, 'Canned Beans', 0.99, 'per 400g can', 800, 'pantry');
+INSERT INTO products VALUES (1027, 'Canned Beans', 0.99, 'per 400g can', 0, 'pantry');
 INSERT INTO products VALUES (1028, 'Peanut Butter', 2.50, 'per 500g jar', 400, 'pantry');
 INSERT INTO products VALUES (1029, 'Flour', 1.69, 'per 1kg bag', 500, 'pantry');
 
@@ -65,11 +65,11 @@ INSERT INTO products VALUES (1038, 'Orange Juice', 1.49, 'per 1 liter carton', 8
 INSERT INTO products VALUES (1039, 'Milkshakes', 2.99, 'per 500ml bottle', 400, 'drinks');
 INSERT INTO products VALUES (1040, 'Energy Drinks', 1.99, 'per 250ml can', 600, 'drinks');
 INSERT INTO products VALUES (1041, 'Iced Tea', 1.29, 'per 1 liter bottle', 700, 'drinks');
-
+L
 INSERT INTO products VALUES (1042, 'Frozen Vegetables', 2.99, 'per 1kg bag', 800, 'freezer');
 INSERT INTO products VALUES (1043, 'Frozen Pizzas', 4.99, 'per 400g pizza', 600, 'freezer');
 INSERT INTO products VALUES (1044, 'Ice Cream', 3.99, 'per 1 liter tub', 400, 'freezer');
-INSERT INTO products VALUES (1045, 'Frozen Chicken Nuggets', 5.49, 'per 500g bag', 500, 'freezer');
+INSERT INTO products VALUES (1045, 'Frozen Chicken', 5.49, 'per 500g bag', 500, 'freezer');
 INSERT INTO products VALUES (1046, 'Frozen Berries', 4.49, 'per 500g bag', 400, 'freezer');
 INSERT INTO products VALUES (1047, 'Frozen Fish Fillets', 8.99, 'per 500g pack', 300, 'freezer');
 
