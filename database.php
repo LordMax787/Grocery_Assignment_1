@@ -11,6 +11,11 @@ if (!$connection) {
     die("Connection failed: " . mysqli_connect_error());
 }
 
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    processOrder();
+    exit();
+  }  
+
 // Get category from query parameters
 $category = $_GET['category'];
 
@@ -39,5 +44,43 @@ echo json_encode($data);
 // Close statement and connection
 $stmt->close();
 mysqli_close($connection);
+
+function processOrder()
+{
+  // Get the form data
+  $name = $_POST['name'];
+  $address = $_POST['address'];
+  $suburb = $_POST['suburb'];
+  $state = $_POST['state'];
+  $country = $_POST['country'];
+  $phone = $_POST['phone'];
+  $email = $_POST['email'];
+  $cart = json_decode($_POST['cart'], true);
+
+  // TODO: Add your order processing logic here
+  // For example, you could save the order to the database or send an email with the order details
+
+  // Send the confirmation email
+  $subject = "Order Confirmation";
+  $message = "Thank you for your order!\n\n";
+  $message .= "Name: $name\n";
+  $message .= "Address: $address, $suburb, $state, $country\n";
+  $message .= "Phone: $phone\n";
+  $message .= "Email: $email\n\n";
+  $message .= "Order Details:\n";
+
+  foreach ($cart as $item) {
+    $message .= "{$item['name']} ({$item['quantity']} x {$item['count']}) - $" . ($item['price'] * $item['count']) . "\n";
+  }
+
+  $headers = "From: your_email@example.com\r\n";
+  $headers .= "Content-Type: text/plain; charset=utf-8\r\n";
+
+  if (mail($email, $subject, $message, $headers)) {
+    echo "Order received and email sent.";
+  } else {
+    echo "Error processing the order. Please try again.";
+  }
+}
 ?>
 
