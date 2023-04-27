@@ -101,6 +101,35 @@
         .category-container {
             margin-top: 20px;
         }
+
+        form {
+            text-align: center;
+        }
+        .checkout-logo {
+            height: 200px; /* Adjust the size as needed */
+            width: auto;
+            display: block;
+            margin: 0 auto; /* This will center the logo */
+        }
+
+        .checkout-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .form-container label {
+            display: block;
+            width: 100%;
+            text-align: left;
+        }
+
+        .form-container input {
+            width: 100%;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+        }
+
     </style>    
 </head>
 <body>
@@ -120,9 +149,6 @@
           <button id="checkout-button" class="w3-button w3-green w3-margin-top" onclick="showCheckoutForm()">Checkout</button>
         </div>
     </div>
-    
-      
-
     <div class="side-menu w3-padding w3-animate-right">
         <div class="w3-padding back-button" onclick="goBack();">&#8592;</div>
     </div>    
@@ -190,6 +216,8 @@
             </div>
         </div>   
     </div>
+    <img src="images/LOGO.png" alt="Logo" class="w3-left checkout-logo">
+
     </div>
 </div>
     <script>
@@ -205,8 +233,10 @@
             searchBar.style.left = `${logoWidth + 1}px`;
             searchBar.style.width = `calc(100% - ${logoWidth + 1}px - 5%)`;
         }
-        window.addEventListener('load', adjustLayout);
-        window.addEventListener('resize', adjustLayout);
+        document.addEventListener("DOMContentLoaded", () => {
+            adjustLayout();
+            window.addEventListener("resize", adjustLayout);
+            });
 
         let cart = [];
         let cartTotalElement = document.getElementById("cart-total");
@@ -366,42 +396,38 @@
                 };
                 document.getElementById("checkout-button").disabled = cart.length === 0;
         }
-        
+
         function checkout() {
-  if (cart.length === 0) {
-    return;
-  }
-  const checkoutForm = `
-    <div id="checkoutForm" class="mt-4">
-      <img src="LOGO.png" alt="Logo" class="img-fluid mx-auto d-block">
-      <h2 class="text-center mt-3">CHECKOUT</h2>
-      <form onsubmit="event.preventDefault(); submitOrder();">
-        <label for="name">Name:</label>
-        <input type="text" id="name" name="name" required>
-        <label for="address">Address:</label>
-        <input type="text" id="address" name="address" required>
-        <label for="suburb">Suburb:</label>
-        <input type="text" id="suburb" name="suburb" required>
-        <label for="state">State:</label>
-        <input type="text" id="state" name="state" required>
-        <label for="country">Country:</label>
-        <input type="text" id="country" name="country" required>
-        <label for="phone">Phone:</label>
-        <input type="tel" id="phone" name="phone" required>
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email" required>
-        <button type="submit" class="btn btn-primary mt-3">Place Order</button>
-      </form>
-    </div>`;
-  document.getElementById("main").innerHTML = checkoutForm;
-}
+            if (cart.length === 0) {
+                return;
+            }
+            const checkoutForm = `
+                <div id="checkoutForm" class="mt-4">
+                <img src="images/LOGO.png" alt="Logo" class="checkout-logo"> <!-- Use the new class for the logo -->
+                <div class="checkout-container"> <!-- Add the new container with the class "checkout-container" -->
+                    <h2 class="text-center mt-3">CHECKOUT</h2>
+                    <form onsubmit="event.preventDefault(); submitOrder();" class="form-container"> <!-- Add the class "form-container" to the form -->
+                        <label for="name">Name:</label>
+                        <input type="text" id="name" name="name" required>
+                        <label for="address">Address:</label>
+                        <input type="text" id="address" name="address" required>
+                        <label for="suburb">Suburb:</label>
+                        <input type="text" id="suburb" name="suburb" required>
+                        <label for="state">State:</label>
+                        <input type="text" id="state" name="state" required>
+                        <label for="country">Country:</label>
+                        <input type="text" id="country" name="country" required>
+                        <label for="phone">Phone:</label>
+                        <input type="tel" id="phone" name="phone" required>
+                        <label for="email">Email:</label>
+                        <input type="email" id="email" name="email" required>
+                        <button type="submit" class="btn btn-primary mt-3">Place Order</button>
+                    </form>
+                </div>
+                </div>`;
 
-function updateCart() {
-  // Your existing code...
-
-  // Add this line at the end of updateCart()
-  document.getElementById("checkoutBtn").disabled = cart.length === 0;
-}
+            document.getElementById("main").innerHTML = checkoutForm;
+            }
 
 
         function createCheckoutForm() {
@@ -409,7 +435,7 @@ function updateCart() {
             checkoutContainer.className = 'checkout-container';
 
             const logo = document.createElement('img');
-            logo.src = 'LOGO.png';
+            logo.src = "images/LOGO.png";
             logo.className = 'checkout-logo';
             checkoutContainer.appendChild(logo);
 
@@ -493,10 +519,7 @@ function updateCart() {
         }
 
 
-        // Add the following event listener to your existing script in index.html
-
-        document.querySelector('#checkout').addEventListener('click', showCheckoutForm);
-
+      
         function showThankYouMessage() {
             const mainInfo = document.querySelector('.main-info');
             mainInfo.innerHTML = '';
