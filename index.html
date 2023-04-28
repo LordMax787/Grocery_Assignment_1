@@ -3,19 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Grocery Store</title>
+    <title>Grocery Store Assignemnt</title>
     <link rel="stylesheet" href="w3.css">
     <style>
         body {
             font-family: Verdana, sans-serif;
             background-color: #DFDFDF;
         }
+
         .red-accent {
             color: rgba(138, 16, 38, 0.5);
         }
+
         .dark-green-accent {
             color: rgba(24, 120, 60, 0.5);
         }
+
         .search-bar {
             position: absolute;
             top: 0;
@@ -23,20 +26,24 @@
             background-color: #DFDFDF;
             border-radius: 0;
         }
+
         .logo {
             height: 80px;
             width: auto;
         }
+
         .shopping-cart, .side-menu {
             position: fixed;
             top: 80px;
             bottom: 0;
             overflow-y: auto;
         }
+
         .shopping-cart {
             left: 0;
             background-color: rgba(138, 16, 38, 0.5);
         }
+
         .cart-items-wrapper {
             max-height: calc(100vh - 240px);
             overflow-y: auto;
@@ -50,6 +57,7 @@
             background-color: rgba(255, 255, 255, 0.8);
             width: 100%;
         }
+
         .cart-item {
             background-color: #f8f8f8;
             border: 1px solid #ccc;
@@ -58,6 +66,7 @@
             position: relative;
             flex-shrink: 0;
         }
+
         .cart-item h4 {
             font-size: 14px;
             font-weight: bold;
@@ -74,12 +83,14 @@
             width: 5%;
             background-color: rgba(138, 16, 38, 0.5);
         }
+
         .main-info {
             padding-top: 80px;
             padding-bottom: 20px;
             margin-left: calc(80px + 1%);
             margin-right: 5%;
         }
+        
         .back-button {
             font-size: 30px;
             text-align: center;
@@ -91,13 +102,16 @@
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
             background-color: rgba(138, 16, 38, 0.5);
         }
+
         .w3-input {
             border: none;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
         }
+
         input[type="search"]::placeholder {
             color: #8A1026;
         }
+
         .category-container {
             margin-top: 20px;
         }
@@ -106,10 +120,10 @@
             text-align: center;
         }
         .checkout-logo {
-            height: 200px; /* Adjust the size as needed */
+            height: 200px;
             width: auto;
             display: block;
-            margin: 0 auto; /* This will center the logo */
+            margin: 0 auto; 
         }
 
         .checkout-container {
@@ -135,22 +149,21 @@
 <body>
     <div class="w3-top w3-bar">
         <img src="images/LOGO.png" alt="Logo" class="w3-left logo">
-        <input type="search" placeholder="Search" class="w3-right w3-input search-bar search-input">
+        <input type="search" id="searchInput" placeholder="Search" class="w3-right w3-input search-bar search-input">
     </div>
 
     <div class="shopping-cart w3-padding w3-animate-left">
         <h3 class="w3-center">Cart</h3>
         <button id="clear-cart" class="w3-button w3-round w3-center">Clear</button>
         <div class="cart-items-wrapper w3-margin-bottom">
-            <!-- Cart items will be populated here -->
         </div>        
         <div class="cart-summary w3-padding w3-border w3-border-grey w3-round">
           <p class="w3-right"><strong>Total: $<span id="cart-total">0.00</span></strong></p>
           <button id="checkout-button" class="w3-button w3-green w3-margin-top" onclick="showCheckoutForm()">Checkout</button>
         </div>
     </div>
+
     <div class="side-menu w3-padding w3-animate-right">
-        <div class="w3-padding back-button" onclick="goBack();">&#8592;</div>
     </div>    
 
     <div class="main-info w3-animate-opacity">
@@ -216,11 +229,10 @@
             </div>
         </div>   
     </div>
-    <img src="images/LOGO.png" alt="Logo" class="w3-left checkout-logo">
-
     </div>
 </div>
     <script>
+
         function adjustLayout() {
             const logo = document.querySelector('.logo');
             const searchBar = document.querySelector('.search-bar');
@@ -238,8 +250,10 @@
             window.addEventListener("resize", adjustLayout);
             });
 
+
         let cart = [];
         let cartTotalElement = document.getElementById("cart-total");
+
 
         function fetchProducts(category) {
             const url = 'database.php?category=' + encodeURIComponent(category);
@@ -258,6 +272,8 @@
                     console.error('Error fetching products:', error);
                 });
         }
+
+
         function displayProducts(products) {
             const categoryContainer = document.querySelector('.category-container');
             categoryContainer.innerHTML = '';
@@ -373,7 +389,7 @@
 
             cartTotalElement.textContent = totalPrice.toFixed(2);
 
-            // Update the clear cart button's disabled state
+
             const clearCartButton = document.getElementById("clear-cart");
             if (clearCartButton) {
                 clearCartButton.disabled = cart.length === 0;
@@ -397,16 +413,33 @@
                 document.getElementById("checkout-button").disabled = cart.length === 0;
         }
 
+        function searchProduct(searchTerm) {
+            fetch(`database.php?search=${searchTerm}`)
+                .then(response => response.json())
+                .then(searchedProduct => {
+                    if (searchedProduct.length > 0) {
+                        showProduct(searchedProduct[0]);
+                    } else {
+                        alert('No product found');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching products:', error);
+                    alert('An error occurred while searching for the product');
+                });
+        }
+
+
         function checkout() {
             if (cart.length === 0) {
                 return;
             }
             const checkoutForm = `
                 <div id="checkoutForm" class="mt-4">
-                <img src="images/LOGO.png" alt="Logo" class="checkout-logo"> <!-- Use the new class for the logo -->
-                <div class="checkout-container"> <!-- Add the new container with the class "checkout-container" -->
+                <img src="images/LOGO.png" alt="Logo" class="checkout-logo"> 
+                <div class="checkout-container"> 
                     <h2 class="text-center mt-3">CHECKOUT</h2>
-                    <form onsubmit="event.preventDefault(); submitOrder();" class="form-container"> <!-- Add the class "form-container" to the form -->
+                    <form onsubmit="event.preventDefault(); submitOrder();" class="form-container"> 
                         <label for="name">Name:</label>
                         <input type="text" id="name" name="name" required>
                         <label for="address">Address:</label>
@@ -428,7 +461,6 @@
 
             document.getElementById("main").innerHTML = checkoutForm;
             }
-
 
         function createCheckoutForm() {
             const checkoutContainer = document.createElement('div');
@@ -495,10 +527,8 @@
         function submitOrder(event) {
             event.preventDefault();
 
-            // Collect form data
             const formData = new FormData(event.target);
 
-            // Send data to the server
             fetch('database.php', {
                 method: 'POST',
                 body: formData,
@@ -510,7 +540,6 @@
                 return response.text();
             })
             .then(() => {
-                // Show the thank you message
                 showThankYouMessage();
             })
             .catch(error => {
@@ -525,28 +554,18 @@
             mainInfo.innerHTML = '';
 
             const thankYouMessage = document.createElement('h2');
-            thankYouMessage.textContent = 'Thank you for your order!';
+            thankYouMessage.textContent = 'Thank you for ordering with Maxs Farm!';
             thankYouMessage.className = 'thank-you-message';
             mainInfo.appendChild(thankYouMessage);
         }
 
                     
-        function goBack() {
-            const currentURL = window.location.href;
-            const mainPageURL = `${window.location.origin}${window.location.pathname}`;
-            if (currentURL !== mainPageURL) {
-                window.location.href = mainPageURL;
-            } else {
-                const mainInfo = document.querySelector('.main-info');
-                const checkoutPage = document.getElementById('checkout-page');
-                mainInfo.style.display = 'block';
-                checkoutPage.style.display = 'none';
+        
+        const searchInput = document.getElementById('searchInput');
+            searchInput.addEventListener('keyup', (event) => {
+            if (event.key === 'Enter') {
+                searchProduct(searchInput.value.trim());
             }
-        }
-        const searchInput = document.querySelector('.search-input');
-            searchInput.addEventListener('input', (event) => {
-                const searchQuery = event.target.value;
-                // Call your search function here with the searchQuery as a parameter
             });
 
         const categoryDivs = document.querySelectorAll('.category');
@@ -557,21 +576,20 @@
                 });
             });
 
-            document.querySelectorAll('[data-subcategory]').forEach(subcategory => {
-                subcategory.addEventListener('click', (event) => {
+        document.querySelectorAll('[data-subcategory]').forEach(subcategory => {
+            subcategory.addEventListener('click', (event) => {
                     event.stopPropagation();
                     const categoryName = subcategory.getAttribute('data-subcategory');
                     fetchProducts(categoryName);
                 });
-            });
-            document.querySelectorAll('.subcategory').forEach(subcategory => {
-                subcategory.addEventListener('click', (event) => {
+            });     
+        document.querySelectorAll('.subcategory').forEach(subcategory => {
+            subcategory.addEventListener('click', (event) => {
                     event.stopPropagation();
                     const categoryName = subcategory.getAttribute('data-category');
                     fetchProducts(categoryName);
                 });
-            });
-            
+            });            
 
     </script>
 </body>

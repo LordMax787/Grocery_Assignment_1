@@ -1,11 +1,10 @@
 <?php
-// Enable error reporting
+
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
 $connection = mysqli_connect('localhost', 'root', '', 'Grocery_assignment_1');
 
-// Check connection
 if (!$connection) {
     http_response_code(500);
     die("Connection failed: " . mysqli_connect_error());
@@ -14,22 +13,34 @@ if (!$connection) {
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     processOrder();
     exit();
-  }  
-
-// Get category from query parameters
-$category = $_GET['category'];
-
-// Prepare and execute statement
-$sql = "SELECT * FROM products WHERE category = ?";
-$stmt = $connection->prepare($sql);
-if (!$stmt) {
-    http_response_code(500);
-    die("Statement preparation failed: " . $connection->error);
 }
-$stmt->bind_param("s", $category);
-$stmt->execute();
 
-// Get results and convert to array
+$searchTerm = isset($_GET['search']) ? $_GET['search'] : null;
+$category = isset($_GET['category']) ? $_GET['category'] : null;
+
+if ($searchTerm) {
+    $sql = "SELECT * FROM products WHERE name LIKE ?";
+    $stmt = $connection->prepare($sql);
+    if (!$stmt) {
+        http_response_code(500);
+        die("Statement preparation failed: " . $connection->error);
+    }
+    $searchTerm = '%' . $searchTerm . '%';
+    $stmt->bind_param("s", $searchTerm);
+} elseif ($category) {
+    $sql = "SELECT * FROM products WHERE category = ?";
+    $stmt = $connection->prepare($sql);
+    if (!$stmt) {
+        http_response_code(500);
+        die("Statement preparation failed: " . $connection->error);
+    }
+    $stmt->bind_param("s", $category);
+} else {
+    http_response_code(400);
+    die("Invalid request");
+}
+
+$stmt->execute();
 $result = $stmt->get_result();
 $data = array();
 
@@ -37,17 +48,16 @@ while ($row = $result->fetch_assoc()) {
     $data[] = $row;
 }
 
-// Output results as JSON
 header('Content-Type: application/json');
 echo json_encode($data);
 
-// Close statement and connection
 $stmt->close();
 mysqli_close($connection);
 
+
 function processOrder()
 {
-  // Get the form data
+
   $name = $_POST['name'];
   $address = $_POST['address'];
   $suburb = $_POST['suburb'];
@@ -57,12 +67,9 @@ function processOrder()
   $email = $_POST['email'];
   $cart = json_decode($_POST['cart'], true);
 
-  // TODO: Add your order processing logic here
-  // For example, you could save the order to the database or send an email with the order details
 
-  // Send the confirmation email
   $subject = "Order Confirmation";
-  $message = "Thank you for your order!\n\n";
+  $message = "Thank you for odering with Max's Farm!\n\n";
   $message .= "Name: $name\n";
   $message .= "Address: $address, $suburb, $state, $country\n";
   $message .= "Phone: $phone\n";
